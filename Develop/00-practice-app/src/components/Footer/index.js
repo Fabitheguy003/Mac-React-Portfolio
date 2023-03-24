@@ -1,5 +1,7 @@
 import React from 'react';
-import { Github} from "react-icons/fa";
+import { FaGithub } from 'react-icons/fa';
+
+
 
 function Footer() {
     return (
@@ -7,7 +9,7 @@ function Footer() {
                 <footer>
                         <a href="https://github.com/Fabitheguy003" target="blank" rel="noopener noreferrer">
                             <li className="logo">
-                                <Github />
+                                <FaGithub />
                             </li>
                         </a>
                 </footer>
