@@ -144,7 +144,11 @@ button[disabled] {
 
 img {
 	max-width: 100%;
-}
+	border-radius: 50%;
+	border-style: groove;
+	max-height: 90%;
+  }
+  
 
 span[role="img"] {
 	cursor: default;
@@ -308,6 +312,7 @@ nav li:hover {
 	height: 300px;
 	margin-bottom: 50px;
 	cursor: pointer;
+	
 }
 
 .portfolio {
@@ -424,10 +429,11 @@ footer {
 	 
 		form {
 			width: 40%;
-			padding: 20px;
+			padding: 70px;
 			border-radius: 10px;
 			margin: auto;
-			text-align: center;
+			text-align:start;
+			margin-top: 9%;
 		  }
 
 }
