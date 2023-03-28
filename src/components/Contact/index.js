@@ -1,75 +1,103 @@
 import React, { useState } from 'react';
-import { validateEmail } from '../../utils/helpers';
-import Contact from '../../images/contact-icon.png';
 
-function ContactForm() {
-  const [formState, setFormState] = useState({ name: '', email: '', message: '' });
-  const [errorMessage, setErrorMessage] = useState('');
-  const { name, email, message } = formState;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!errorMessage) {
-      setFormState({ [e.target.name]: e.target.value });
-      console.log('Form', formState);
-    }
-  };
+const Contact = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [nameError, setNameError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+  const [messageError, setMessageError] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
-  const handleChange = (e) => {
-    if (e.target.name === 'email') {
-      const isValid = validateEmail(e.target.value);
-      if (!isValid) {
-        setErrorMessage('Your email is invalid.');
-      } else {
-        setErrorMessage('');
-      }
-    } else {
-      if (!e.target.value.length) {
-        setErrorMessage(`${e.target.name} is required.`);
-      } else {
-        setErrorMessage('');
-      }
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setNameError(false);
+    setEmailError(false);
+    setMessageError(false);
+
+
+    if (name === '') {
+      setNameError(true);
+      return;
     }
-    if (!errorMessage) {
-      setFormState({ ...formState, [e.target.name]: e.target.value });
-      console.log('Handle Form', formState);
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setEmailError(true);
+      return;
     }
+
+    if (message === '') {
+      setMessageError(true);
+      return;
+    }
+
+   
+    console.log(`Name: ${name}\nEmail: ${email}\nMessage: ${message}`);
+
+    setFormSubmitted(true);
   };
 
   return (
-    <section className="contact">
-      <div className="center">
-        <h1 className="page-header">Reach out to me</h1>
-      </div>
-      <div className="center">
-        <img src={Contact} alt="Icon for contacting me" className="photo" />
-      </div>
-      <div className="center">
-        <form id="contact-form" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="name">Name:</label>
-            <input type="text" name="name" defaultValue={name} onBlur={handleChange} />
+    <section >
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="name">Name *</label>
+                <input
+                  type="text"
+                  className={`form-control ${nameError ? 'is-invalid' : ''}`}
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {nameError && (
+                  <div className="invalid-feedback">Please enter your name</div>
+                )}
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email address *</label>
+                <input
+                  type="email"
+                  className={`form-control ${emailError ? 'is-invalid' : ''}`}
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {emailError && (
+                  <div className="invalid-feedback">Please enter a valid email address</div>
+                )}
+              </div>
+              <div className="form-group">
+                <label htmlFor="message">Message *</label>
+                <textarea
+                  className={`form-control ${messageError ? 'is-invalid' : ''}`}
+                  id="message"
+                  rows="5"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                ></textarea>
+                {messageError && (
+                  <div className="invalid-feedback">Please enter a message</div>
+                )}
+              </div>
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+            </form>
+            {formSubmitted && (
+              <div className="alert alert-success mt-3" role="alert">
+                Message succesfully sent. Thank you!
+              </div>
+            )}
           </div>
-          <div>
-            <label htmlFor="email">Email:</label>
-            <input type="email" name="email" defaultValue={email} onBlur={handleChange} />
-          </div>
-          <div>
-            <label htmlFor="message">message:</label>
-            <textarea name="message" rows="5" defaultValue={message} onBlur={handleChange} />
-          </div>
-          {errorMessage && (
-            <div>
-              <p className="error-text">{errorMessage}</p>
-            </div>
-          )}
-          <button className="btn btn-primary" data-testid="button" type="submit">
-            Submit
-          </button>
-        </form>
+        </div>
       </div>
     </section>
   );
-}
+};
 
-export default ContactForm;
+export default Contact;
